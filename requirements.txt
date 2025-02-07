@@ -1,0 +1,5 @@
+numpy==2.2.2
+pycairo==1.27.0
+PyGObject==3.50.0
+PyOpenGL==3.1.9
+PyOpenGL-accelerate==3.1.9
