@@ -117,15 +117,15 @@ float rayTorus(vec3 ro, vec3 rd, vec2 tor) {
 
 // License: MIT, author: Inigo Quilez, found: https://iquilezles.org/articles/intersectors
 vec3 torusNormal(vec3 pos, vec2 tor) {
-  return normalize(pos*(dot(pos,pos)- tor.y*tor.y - tor.x*tor.x*vec3(1.0,1.0,-1.0)));
+  return normalize(pos * (dot(pos, pos)- tor.y * tor.y - tor.x * tor.x * vec3(1.0, 1.0, -1.0)));
 }
 
 // License: Unknown, author: Unknown, found: don't remember
 float tanh_approx(float x) {
   //  Found this somewhere on the interwebs
   //  return tanh(x);
-  float x2 = x*x;
-  return clamp(x*(27.0 + x2)/(27.0+9.0*x2), -1.0, 1.0);
+  float x2 = x * x;
+  return clamp(x * (27.0 + x2) / (27.0 + 9.0 * x2), -1.0, 1.0);
 }
 
 vec3 color(vec2 p, vec2 q) {
@@ -140,19 +140,19 @@ vec3 color(vec2 p, vec2 q) {
   vec3 ww = normalize(la - ro);
   vec3 uu = normalize(cross(up, ww));
   vec3 vv = normalize(cross(ww,uu));
-  vec3 rd = normalize(p.x*uu + p.y*vv + rdd*ww);
+  vec3 rd = normalize(p.x * uu + p.y * vv + rdd * ww);
 
-  const vec2 tor = 0.55*vec2(1.0, 0.75);
+  const vec2 tor = 0.55 * vec2(1.0, 0.75);
   float td    = rayTorus(ro, rd, tor);
-  vec3  tpos  = ro + rd*td;
+  vec3  tpos  = ro + rd * td;
   vec3  tnor  = -torusNormal(tpos, tor);
   vec3  tref  = reflect(rd, tnor);
 
   vec3  ldif1 = lp1 - tpos;
   float ldd1  = dot(ldif1, ldif1);
   float ldl1  = sqrt(ldd1);
-  vec3  ld1   = ldif1/ldl1;
-  vec3  sro   = tpos+0.05*tnor;
+  vec3  ld1   = ldif1 / ldl1;
+  vec3  sro   = tpos + 0.05 * tnor;
   float sd    = rayTorus(sro, ld1, tor);
   vec3  spos  = sro+ld1*sd;
   vec3  snor  = -torusNormal(spos, tor);
@@ -160,7 +160,7 @@ vec3 color(vec2 p, vec2 q) {
   float dif1  = max(dot(tnor, ld1), 0.0);
   float spe1  = pow(max(dot(tref, ld1), 0.0), 10.0);
   float r     = length(tpos.xy);
-  float a     = atan(tpos.y, tpos.x)-PI*tpos.z/(r+0.5*abs(tpos.z))-TTIME/45.0;
+  float a     = atan(tpos.y, tpos.x) - PI * tpos.z / (r + 0.5 * abs(tpos.z)) - TTIME / 45.0;
   float s     = mix(0.05, 0.5, tanh_approx(2.0*abs(td-0.75)));
   vec3  bcol0 = vec3(0.3);  
   vec3  bcol1 = vec3(0.025);  
@@ -183,10 +183,10 @@ vec3 color(vec2 p, vec2 q) {
 // License: MIT, author: Inigo Quilez, found: https://iquilezles.org/www/index.htm
 vec3 postProcess(vec3 col, vec2 q) {
   col = clamp(col, 0.0, 1.0);
-  col = pow(col, 1.0/vec3(2.2));
-  col = col*0.6+0.4*col*col*(3.0-2.0*col);
+  col = pow(col, 1.0 / vec3(2.2));
+  col = col * 0.6 + 0.4 * col * col * (3.0 - 2.0 * col);
   col = mix(col, vec3(dot(col, vec3(0.33))), -0.4);
-  col *=0.5+0.5*pow(19.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.7);
+  col *= 0.5 + 0.5 * pow(19.0 * q.x * q.y * (1.0 - q.x) * (1.0 - q.y), 0.7);
   return col;
 }
 
